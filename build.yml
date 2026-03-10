@@ -1,0 +1,38 @@
+name: Build PROTOCOL° Firmware
+
+on:
+  push:
+    branches: [ main, master ]
+  pull_request:
+    branches: [ main, master ]
+  # Manuell auslösen über GitHub UI
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Code auschecken
+        uses: actions/checkout@v4
+        with:
+          submodules: recursive
+
+      - name: ESP-IDF Setup
+        uses: espressif/esp-idf-ci-action@v1
+        with:
+          esp_idf_version: v5.2.1
+          target: esp32s3
+          path: '.'
+          command: idf.py build
+
+      - name: Firmware .bin als Artifact hochladen
+        uses: actions/upload-artifact@v4
+        with:
+          name: protocol_fw_firmware
+          path: |
+            build/protocol_fw.bin
+            build/bootloader/bootloader.bin
+            build/partition_table/partition-table.bin
+            build/flash_args
+          retention-days: 30

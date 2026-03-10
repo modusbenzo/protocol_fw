@@ -1,0 +1,17 @@
+# ESP-IDF Build Output
+build/
+sdkconfig
+sdkconfig.old
+dependencies.lock
+
+# macOS
+.DS_Store
+.AppleDouble
+.LSOverride
+
+# VS Code
+.vscode/
+
+# CLion
+.idea/
+cmake-build-*/
