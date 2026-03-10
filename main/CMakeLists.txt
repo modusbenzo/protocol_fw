@@ -1,0 +1,26 @@
+idf_component_register(
+    SRCS
+        "main.c"
+        "ble/ble_gatt.c"
+        "lora/sx1262.c"
+        "lora/mesh.c"
+        "proto/mesh_proto.c"
+        "config/node_config.c"
+        "admin/admin_cmd.c"
+    INCLUDE_DIRS
+        "."
+        "ble"
+        "lora"
+        "proto"
+        "config"
+        "admin"
+    REQUIRES
+        nvs_flash
+        bt
+        driver
+        esp_timer
+        esp_system
+        freertos
+        log
+        spi_flash
+)
