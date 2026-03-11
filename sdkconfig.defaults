@@ -47,5 +47,5 @@ CONFIG_SPIRAM_MODE_OCT=y
 # Stack sizes
 CONFIG_ESP_MAIN_TASK_STACK_SIZE=8192
 
-# Disable unused
-CONFIG_ESP_WIFI_ENABLED=n
+# lwIP — IPv4 muss aktiv sein (mbedTLS braucht es)
+CONFIG_LWIP_IPV4=y
