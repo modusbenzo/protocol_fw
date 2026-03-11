@@ -224,15 +224,6 @@ static int cb_from_num_access(uint16_t conn_handle, uint16_t attr_handle,
     return BLE_ATT_ERR_REQ_NOT_SUPPORTED;
 }
 
-// fromNum — Subscribe/Unsubscribe Callback
-static void cb_from_num_subscribe(uint16_t conn_handle, uint16_t attr_handle,
-                                   uint8_t reason, uint8_t prev_notify,
-                                   uint8_t cur_notify, uint8_t prev_indicate,
-                                   uint8_t cur_indicate, void *arg) {
-    s_from_num_notify = cur_notify != 0;
-    ESP_LOGI(TAG, "fromNum Subscription: %s", s_from_num_notify ? "aktiv" : "inaktiv");
-}
-
 // ============================================================
 // GATT Service Definition
 // ============================================================
@@ -257,11 +248,10 @@ static const struct ble_gatt_svc_def s_gatt_svcs[] = {
             },
             // fromNum: Read + Notify
             {
-                .uuid          = &UUID_FROM_NUM.u,
-                .access_cb     = cb_from_num_access,
-                .val_handle    = &s_from_num_handle,
-                .flags         = BLE_GATT_CHR_F_READ | BLE_GATT_CHR_F_NOTIFY,
-                .subscribe_cb  = cb_from_num_subscribe,
+                .uuid       = &UUID_FROM_NUM.u,
+                .access_cb  = cb_from_num_access,
+                .val_handle = &s_from_num_handle,
+                .flags      = BLE_GATT_CHR_F_READ | BLE_GATT_CHR_F_NOTIFY,
             },
             { 0 } // Terminator
         },
@@ -275,6 +265,15 @@ static const struct ble_gatt_svc_def s_gatt_svcs[] = {
 
 static int gap_event_handler(struct ble_gap_event *event, void *arg) {
     switch (event->type) {
+
+        case BLE_GAP_EVENT_SUBSCRIBE: {
+            if (event->subscribe.attr_handle == s_from_num_handle) {
+                s_from_num_notify = event->subscribe.cur_notify != 0;
+                ESP_LOGI(TAG, "fromNum Subscription: %s",
+                         s_from_num_notify ? "aktiv" : "inaktiv");
+            }
+            break;
+        }
 
         case BLE_GAP_EVENT_CONNECT: {
             if (event->connect.status == 0) {

@@ -35,7 +35,8 @@ static void load_defaults(void) {
     } while (s_config.node_num == 0 || s_config.node_num == 0xFFFFFFFF);
 
     strncpy(s_config.long_name,  "PROTOCOL NODE", sizeof(s_config.long_name) - 1);
-    strncpy(s_config.short_name, "PRTL",          sizeof(s_config.short_name) - 1);
+    s_config.long_name[sizeof(s_config.long_name) - 1] = '\0';
+    memcpy(s_config.short_name, "PRTL\0", 5);  // exakt 4 Zeichen + Nullterminator
     s_config.ghost_mode              = false;
     s_config.region                  = REGION_EU868;
     s_config.tx_power_dbm            = LORA_DEFAULT_TX_POWER;

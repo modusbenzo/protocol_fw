@@ -1,6 +1,8 @@
 #pragma once
 #include <stdint.h>
+#include <stdbool.h>
 #include <stddef.h>
+#include "sx1262.h"
 
 // ============================================================
 // PROTOCOL° Firmware — Admin Command Handler
